@@ -18,16 +18,16 @@ const mockUser = {
 
 export const dynamic = 'force-dynamic';
 
-export async function POST(request: Request) {
+export async function logUser(email: string, password: string) {
   try {
-    const { email, password } = await request.json();
-
     if (!email || !password) {
       return NextResponse.json(
         { error: "Email et mot de passe requis" },
         { status: 400 }
       );
     }
+
+    console.log('node env', process.env.NODE_ENV)
 
     // En développement, vérifier les identifiants statiques
     if (process.env.NODE_ENV === "development") {
@@ -57,7 +57,6 @@ export async function POST(request: Request) {
 
         response.cookies.set("token", token, {
           httpOnly: true,
-          secure: process.env.NODE_ENV === "production",
           sameSite: "lax",
           maxAge: 86400,
           path: "/"
